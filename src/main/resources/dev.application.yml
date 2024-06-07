@@ -1,0 +1,24 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-exception: true
+
+spring:
+  application:
+    name: testvkbot
+  profiles:
+    active: "dev"
+
+logging:
+  pattern:
+    console: "%d [a:%X{accountId},c:%X{bot},r:%X{requestId}] %5p [%8c] - %m %n"
+  level:
+    "dev.upersuser": debug
+    "org.springframework": warn
+
+vk:
+  groupId: ${VK_GROUP_ID}
+  confirmationString: ${VK_CONFIRMATION_STRING}
+  secret: ${VK_SECRET}
+  apiKey: ${VK_API_KEY}
+  apiVersion: ${VK_API_VERSION}
