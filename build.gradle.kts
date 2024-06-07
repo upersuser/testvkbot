@@ -46,6 +46,6 @@ tasks {
 
     bootJar {
         archiveFileName.set("testvkbot.jar")
-        mainClass.set("dev.upersuser.testvkbot.TestvkbotApplication")
+        mainClass.set("dev.upersuser.testvkbot.TestvkbotApplicationKt")
     }
 }
