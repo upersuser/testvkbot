@@ -2,6 +2,8 @@ package dev.upersuser.testvkbot.controller.advice
 
 import dev.upersuser.testvkbot.exception.InvalidConfirmationException
 import dev.upersuser.testvkbot.exception.InvalidEventSecretException
+import dev.upersuser.testvkbot.exception.UnsupportedMessageTypeException
+import dev.upersuser.testvkbot.exception.VkApiCallException
 import dev.upersuser.testvkbot.util.WithLogger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,6 +15,7 @@ import org.springframework.web.context.request.WebRequest
 
 @ControllerAdvice
 class VkControllerExceptionHandler : WithLogger {
+
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun handleReadHttpMessageException(
         e: RuntimeException,
@@ -35,7 +38,18 @@ class VkControllerExceptionHandler : WithLogger {
     @ExceptionHandler(value = [InvalidEventSecretException::class])
     fun handleInvalidEventSecretException(
         e: InvalidEventSecretException,
+    ): ResponseEntity<String> = ResponseEntity("Unauthorized request", HttpStatus.FORBIDDEN)
+
+
+    @ExceptionHandler(value = [UnsupportedMessageTypeException::class])
+    fun handleUnsupportedMessageTypeException(
+        e: UnsupportedMessageTypeException,
+    ): ResponseEntity<String> = ResponseEntity.badRequest().body("The message type is not supported")
+
+    @ExceptionHandler(value = [VkApiCallException::class])
+    fun handleVkApiCallException(
+        e: VkApiCallException,
     ): ResponseEntity<String> {
-        return ResponseEntity("Unauthorized request", HttpStatus.FORBIDDEN)
+        return ResponseEntity.internalServerError().body("An error occurred when calling the API")
     }
 }

@@ -1,25 +1,22 @@
 package dev.upersuser.testvkbot.bot
 
 import dev.upersuser.testvkbot.apiclient.VkBotWebClient
-import dev.upersuser.testvkbot.dto.VkMessageNewData
+import dev.upersuser.testvkbot.dto.VkPrivateMessage
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 
 @Service
 class VkBot(
     private val client: VkBotWebClient
 ) {
-    fun sendAnswer(message: VkMessageNewData) {
+    fun sendAnswer(message: VkPrivateMessage) {
         val userText = message.text
 
         if (userText.isBlank()) return
 
         val userId = message.fromId
 
-        try {
-            client.sendMessage(userId, generateEchoString(userText))
-        } catch (_: ResponseStatusException) {}
+        client.sendMessage(userId, createEchoString(userText))
     }
 
-    private fun generateEchoString(text: String) = "Вы сказали: $text"
+    private fun createEchoString(text: String, prefix: String = "Вы сказали: ") = "$prefix$text"
 }

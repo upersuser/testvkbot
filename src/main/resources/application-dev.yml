@@ -6,14 +6,12 @@ server:
 spring:
   application:
     name: testvkbot
-  profiles:
-    active: "dev"
 
 logging:
   pattern:
     console: "%d [a:%X{accountId},c:%X{bot},r:%X{requestId}] %5p [%8c] - %m %n"
   level:
-    "dev.upersuser": debug
+    "dev.upersuser.testvkbot": debug
     "org.springframework": warn
 
 vk:

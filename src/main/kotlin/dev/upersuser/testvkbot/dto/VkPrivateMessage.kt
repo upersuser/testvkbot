@@ -2,10 +2,10 @@ package dev.upersuser.testvkbot.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import dev.upersuser.testvkbot.model.VkMessageData
+import dev.upersuser.testvkbot.model.VkMessage
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class VkMessageNewData(
+data class VkPrivateMessage(
     val date: Long,
     @JsonProperty("from_id") val fromId: Long,
     val id: Long,
@@ -13,4 +13,4 @@ data class VkMessageNewData(
     @JsonProperty("peer_id") val peerId: Long,
     @JsonProperty("random_id") val randomId: Long,
     val text: String,
-) : VkMessageData
+) : VkMessage
