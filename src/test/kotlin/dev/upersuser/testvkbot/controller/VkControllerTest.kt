@@ -2,18 +2,14 @@ package dev.upersuser.testvkbot.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.sun.jdi.request.EventRequest
 import dev.upersuser.testvkbot.dto.VkConfirmationRequest
 import dev.upersuser.testvkbot.dto.VkEventRequest
 import dev.upersuser.testvkbot.dto.VkPrivateMessage
-import dev.upersuser.testvkbot.dto.VkRequest
 import dev.upersuser.testvkbot.model.ClientInfo
 import dev.upersuser.testvkbot.model.EventData
-import dev.upersuser.testvkbot.service.VkServiceImpl
+import dev.upersuser.testvkbot.service.VkService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -35,7 +31,7 @@ class VkControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var vkService: VkServiceImpl
+    private lateinit var vkService: VkService
 
     private lateinit var objectMapper: ObjectMapper
 

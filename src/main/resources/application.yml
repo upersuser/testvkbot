@@ -25,12 +25,12 @@ logging:
   pattern:
     console: "%d [a:%X{accountId},c:%X{bot},r:%X{requestId}] %5p [%8c] - %m %n"
     file: "%d [a:%X{accountId},c:%X{bot},r:%X{requestId}] %5p [%8c] - %m %n"
-#  logback:
-#    rollingpolicy:
-#      max-file-size: 10MB
-#      file-name-pattern: "main.%d.%i.log.gz"
-#  file:
-#    name: ${log.dir}/app.main.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      file-name-pattern: "main.%d.%i.log.gz"
+  file:
+    name: ${log.dir}/app.main.log
   level:
     "dev.upersuser": info
     "org.springframework": warn

@@ -1,4 +1,4 @@
-FROM openjdk:18.0.2.1-jdk AS JDK_18
+FROM openjdk:21-jdk as JDK21
 
 LABEL authors="upersuser" title="testvkbot"
 

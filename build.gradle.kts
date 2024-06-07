@@ -39,6 +39,11 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 tasks {
     withType<Test> {
         useJUnitPlatform()
@@ -48,4 +53,8 @@ tasks {
         archiveFileName.set("testvkbot.jar")
         mainClass.set("dev.upersuser.testvkbot.TestvkbotApplicationKt")
     }
+}
+
+tasks.create("stage") {
+    dependsOn("bootJar")
 }

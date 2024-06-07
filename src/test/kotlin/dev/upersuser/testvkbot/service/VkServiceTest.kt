@@ -16,11 +16,11 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.*
 import java.time.Instant
 
-class VkServiceImplTest {
+class VkServiceTest {
 
     private lateinit var vkProperties: VkProperties
     private lateinit var bot: VkBot
-    private lateinit var vkService: VkServiceImpl
+    private lateinit var vkService: VkService
 
     private val vkPrivateMessage = VkPrivateMessage(
         date = Instant.now().toEpochMilli(),
@@ -57,7 +57,7 @@ class VkServiceImplTest {
             apiVersion = "5.131"
         )
         bot = mock(VkBot::class.java)
-        vkService = VkServiceImpl(vkProperties, bot)
+        vkService = VkService(bot, vkProperties)
     }
 
     @Test
