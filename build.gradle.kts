@@ -3,17 +3,12 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5"
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
-//    application
 }
 
 group = "dev.upersuser"
 version = "0.0.1"
 
 val mockito = "4.0.0"
-
-/*application {
-    mainClass = "dev.upersuser.testvkbot.TestvkbotApplication"
-}*/
 
 kotlin {
     compilerOptions {
