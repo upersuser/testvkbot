@@ -7,7 +7,7 @@ import dev.upersuser.testvkbot.dto.VkEventRequest
 import dev.upersuser.testvkbot.dto.VkPrivateMessage
 import dev.upersuser.testvkbot.model.ClientInfo
 import dev.upersuser.testvkbot.model.EventData
-import dev.upersuser.testvkbot.service.VkService
+import dev.upersuser.testvkbot.service.VkMessageService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
@@ -31,7 +31,7 @@ class VkControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var vkService: VkService
+    private lateinit var vkMessageService: VkMessageService
 
     private lateinit var objectMapper: ObjectMapper
 
@@ -45,7 +45,7 @@ class VkControllerTest {
         val vkRequest = VkConfirmationRequest(groupId)
         val requestJson = objectMapper.writeValueAsString(vkRequest)
 
-        `when`(vkService.processRequest(vkRequest)).thenReturn("ok")
+        `when`(vkMessageService.processRequest(vkRequest)).thenReturn("ok")
 
         mockMvc.perform(post("/vkbot")
             .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ class VkControllerTest {
             .andExpect(status().isOk)
             .andExpect(content().string("ok"))
 
-        verify(vkService, times(1)).processRequest(vkRequest)
+        verify(vkMessageService, times(1)).processRequest(vkRequest)
     }
 
     @Test
@@ -87,7 +87,7 @@ class VkControllerTest {
         )
         val requestJson = objectMapper.writeValueAsString(vkRequest)
 
-        `when`(vkService.processRequest(vkRequest)).thenReturn("ok")
+        `when`(vkMessageService.processRequest(vkRequest)).thenReturn("ok")
 
         mockMvc.perform(post("/vkbot")
             .contentType(MediaType.APPLICATION_JSON)
@@ -95,6 +95,6 @@ class VkControllerTest {
             .andExpect(status().isOk)
             .andExpect(content().string("ok"))
 
-        verify(vkService, times(1)).processRequest(vkRequest)
+        verify(vkMessageService, times(1)).processRequest(vkRequest)
     }
 }

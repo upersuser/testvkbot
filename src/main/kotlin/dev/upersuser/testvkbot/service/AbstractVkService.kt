@@ -5,11 +5,13 @@ import dev.upersuser.testvkbot.dto.VkRequest
 import dev.upersuser.testvkbot.exception.InvalidConfirmationException
 import dev.upersuser.testvkbot.exception.InvalidEventSecretException
 import dev.upersuser.testvkbot.properties.VkProperties
-import dev.upersuser.testvkbot.util.WithLogger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 abstract class AbstractVkService(
     private val vkProperties: VkProperties
-) : WithLogger {
+) {
+    val logger: Logger = LoggerFactory.getLogger(AbstractVkService::class.java)
 
     /**
      * Обработка запросов от vk.

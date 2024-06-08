@@ -4,7 +4,7 @@ import dev.upersuser.testvkbot.exception.InvalidConfirmationException
 import dev.upersuser.testvkbot.exception.InvalidEventSecretException
 import dev.upersuser.testvkbot.exception.UnsupportedMessageTypeException
 import dev.upersuser.testvkbot.exception.VkApiCallException
-import dev.upersuser.testvkbot.util.WithLogger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -14,11 +14,12 @@ import org.springframework.web.context.request.WebRequest
 
 
 @ControllerAdvice
-class VkControllerExceptionHandler : WithLogger {
+class VkControllerExceptionHandler {
+    private val logger = LoggerFactory.getLogger(VkControllerExceptionHandler::class.java)
 
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun handleReadHttpMessageException(
-        e: RuntimeException,
+        e: HttpMessageNotReadableException,
         request: WebRequest
     ): ResponseEntity<String> {
         logger.warn("Http message was not recognized:: ${e.stackTraceToString()}")

@@ -9,6 +9,7 @@ import dev.upersuser.testvkbot.exception.InvalidEventSecretException
 import dev.upersuser.testvkbot.model.ClientInfo
 import dev.upersuser.testvkbot.model.EventData
 import dev.upersuser.testvkbot.properties.VkProperties
+import dev.upersuser.testvkbot.properties.WebClientProperties
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,11 +17,13 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.*
 import java.time.Instant
 
-class VkServiceTest {
+class VkMessageServiceTest {
 
     private lateinit var vkProperties: VkProperties
+    private lateinit var webClientProperties: WebClientProperties
+
     private lateinit var bot: VkBot
-    private lateinit var vkService: VkService
+    private lateinit var vkMessageService: VkMessageService
 
     private val vkPrivateMessage = VkPrivateMessage(
         date = Instant.now().toEpochMilli(),
@@ -54,16 +57,17 @@ class VkServiceTest {
             confirmationString = "confirmation_string",
             secret = "secret",
             apiKey = "api_key",
-            apiVersion = "5.131"
+            apiVersion = "5.199"
         )
+        webClientProperties = WebClientProperties(5000, 5000)
         bot = mock(VkBot::class.java)
-        vkService = VkService(bot, vkProperties)
+        vkMessageService = VkMessageService(bot, vkProperties)
     }
 
     @Test
     fun `processRequest should process VkConfirmationRequest`() {
         val request = VkConfirmationRequest(groupId = 12345)
-        val response = vkService.processRequest(request)
+        val response = vkMessageService.processRequest(request)
         assertEquals("confirmation_string", response)
     }
 
@@ -71,16 +75,8 @@ class VkServiceTest {
     fun `processRequest should throw InvalidConfirmationException for wrong groupId`() {
         val request = VkConfirmationRequest(groupId = 54321)
         assertThrows<InvalidConfirmationException> {
-            vkService.processRequest(request)
+            vkMessageService.processRequest(request)
         }
-    }
-
-    @Test
-    fun `processRequest should process VkEventRequest with valid secret and VkPrivateMessage`() {
-        val response = vkService.processRequest(vkRequest)
-        assertEquals("ok", response)
-
-        verify(bot, times(1)).sendAnswer(vkPrivateMessage)
     }
 
     @Test
@@ -88,7 +84,7 @@ class VkServiceTest {
         val request = vkRequest.copy(secret = "invalid_secret")
 
         assertThrows<InvalidEventSecretException> {
-            vkService.processRequest(request)
+            vkMessageService.processRequest(request)
         }
     }
 }

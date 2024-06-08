@@ -8,7 +8,7 @@ plugins {
 group = "dev.upersuser"
 version = "0.0.1"
 
-val mockito = "4.0.0"
+val mockito = "5.11.0"
 
 kotlin {
     compilerOptions {

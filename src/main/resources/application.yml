@@ -30,7 +30,7 @@ logging:
       max-file-size: 10MB
       file-name-pattern: "main.%d.%i.log.gz"
   file:
-    name: ${log.dir}/app.main.log
+    name: ${log.dir:./logs}/app.main.log
   level:
     "dev.upersuser": info
     "org.springframework": warn
@@ -41,4 +41,8 @@ vk:
   secret: ${VK_SECRET}
   apiKey: ${VK_API_KEY}
   apiVersion: ${VK_API_VERSION}
+
+webclient:
+  connectTimeout: ${WEB_CLIENT_CONNECT_TIMEOUT:5000}
+  readTimeout: ${WEB_CLIENT_READ_TIMEOUT:5000}
 

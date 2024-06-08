@@ -5,8 +5,10 @@ import dev.upersuser.testvkbot.dto.VkApiCallErrorResponse
 import dev.upersuser.testvkbot.exception.VkApiCallException
 import dev.upersuser.testvkbot.properties.VkProperties
 import dev.upersuser.testvkbot.model.VkEventApiType
-import dev.upersuser.testvkbot.util.WithLogger
+import dev.upersuser.testvkbot.properties.WebClientProperties
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.server.ResponseStatusException
@@ -15,12 +17,21 @@ import org.springframework.web.util.UriComponentsBuilder
 @Service
 class VkBotWebClient(
     private val vkProperties: VkProperties,
+    private val webClientProperties: WebClientProperties,
     private val objectMapper: ObjectMapper,
 
     webClientBuilder: RestClient.Builder,
-) : WithLogger {
-
-    private val vkWebClient = webClientBuilder.baseUrl(VK_API_URL).build()
+) {
+    private val logger = LoggerFactory.getLogger(VkBotWebClient::class.java)
+    private val vkWebClient = webClientBuilder
+        .baseUrl(VK_API_URL)
+        .requestFactory(
+            SimpleClientHttpRequestFactory().apply {
+                setConnectTimeout(webClientProperties.connectTimeout)
+                setReadTimeout(webClientProperties.readTimeout)
+            }
+        )
+        .build()
 
     /**
      * Метод отправляет сообщение.
@@ -59,25 +70,22 @@ class VkBotWebClient(
             }
             .toEntity(String::class.java)
         } catch (e: Exception) {
-            if (e !is ResponseStatusException)
-                logger.error("Error while sending message stack trace:: ${e.stackTraceToString()}")
+            if (e !is ResponseStatusException) {
+                logger.error("Error while calling vk message.send method:: ${e.message}")
+                logger.error("Stack trace:: ${e.stackTraceToString()}")
+            }
 
             throw VkApiCallException()
         }
 
-        val error = try {
-            objectMapper.readValue(response.body, VkApiCallErrorResponse::class.java)
-        } catch (_: Exception) {
-            null
-        }
-
-        if (error != null) {
+        try {
+            val error = objectMapper.readValue(response.body, VkApiCallErrorResponse::class.java)
             logger.error("Vk api call exception code:: ${error.error.errorCode} message:: ${error.error.errorMsg}")
 
             throw VkApiCallException(error.error.errorCode, error.error.errorMsg)
-        } else {
-            logger.debug("Vk api call success userId:: $userId message:: $messageText")
-        }
+        } catch (_: Exception) {}
+
+        logger.debug("Vk api call success userId:: $userId message:: $messageText")
     }
 
     companion object {

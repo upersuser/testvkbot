@@ -6,14 +6,12 @@ import dev.upersuser.testvkbot.dto.VkEventRequest
 import dev.upersuser.testvkbot.dto.VkPrivateMessage
 import dev.upersuser.testvkbot.properties.VkProperties
 import dev.upersuser.testvkbot.dto.VkRequest
-import dev.upersuser.testvkbot.exception.InvalidEventSecretException
 import dev.upersuser.testvkbot.exception.UnsupportedMessageTypeException
 import org.springframework.stereotype.Service
 
 @Service
-class VkService(
+class VkMessageService(
     private val bot: VkBot,
-
     vkProperties: VkProperties
 ): AbstractVkService(vkProperties) {
 
@@ -26,7 +24,7 @@ class VkService(
                 validateSecret(request.secret)
 
                 when (val message = request.eventData.message) {
-                    is VkPrivateMessage -> bot.sendAnswer(message).let { "ok" }
+                    is VkPrivateMessage -> bot.sendAnswer(message)
                     else -> throw UnsupportedMessageTypeException()
                 }
             }
